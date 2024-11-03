@@ -1,0 +1,11 @@
+-- database: :memory:
+CREATE DATABASE Todo;
+
+CREATE TABLE
+    todos (
+        task_id INTEGER PRIMARY KEY,
+        todo_task TEXT NOT NULL UNIQUE,
+        check_status TEXT NOT NULL,
+        check_state TEXT NOT NULL,
+        check_date CURRENT_TIMESTAMP NOT NULL
+    );

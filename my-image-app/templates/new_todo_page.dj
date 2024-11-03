@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>To do List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.min.js"
+        integrity="sha256-Fb0zP4jE3JHqu+IBB9YktLcSjI1Zc6J2b6gTjB0LpoM=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+</head>
+
+<body>
+    <div class="container-xl h-25 background-color">
+        <div class="container-xl skeww">
+            <h1 class="d-xl-flex col-12 p-xl-5 color">A To do List App</h1>
+        </div>
+    </div>
+    <div id="container" name="container"
+        class="container-xl flex-xl-wrap bg-primary border-primary rounded-0 p-5 wrapper-xl">
+        <h3 class="text-dark p-2 text-lg-left">To do Task</h3>
+        <form enctype="multipart/form-data" id="add-task" name="add-task" action="\add_task" class="form-group p-3"
+            method="post">
+            <input type="text" id="task-input" name="task-input" placeholder="Add a new task"
+                class="small p-4 col-6 float-left border-dark rounded-left text-black-100 text-capitalize" />
+            <button type="submit" class="small btn btn-info pb-4 m-0 p-3 col-lg-4 rounded-right border-dark m-1">
+                Add Task
+            </button>
+        </form>
+        <div class="flex text-info text-center col-lg-6">
+            {% if task == "success" %}
+            <h3 class="alert-success">{{ message }}</h3>
+            {% elif task == "warning" %}
+            <h3 class="alert-warning">{{ message }}</h3>
+            {% endif %}
+        </div>
+        {% if used_dict | length == 0 %}
+        <ul id="task-list-1" class="bg-light rounded col-9 m-3 p-3">
+            <li>No tasks added yet.</li>
+        </ul>
+        {% endif %} {% if used_dict | length > 0 %} {% for value in used_dict %}
+        <div id="task-list" class="bg-light rounded col-xl-12 m-3 p-5 task-div" style="z-index: 9">
+            <div id="text-value" name="text-value" class="m-1 p-3 text-capitalize flex-wrap text-value" value="">
+                <p id="text-dark" class="m-1 text-capitalize flex-wrap">
+                    &#x2022;&nbsp;&nbsp;&nbsp;{{ value }}
+                </p>
+            </div>
+            <form enctype="multipart/form-data" id="complete_task" name="complete_task"
+                class="forrm-horizontal form-group d-xl-inline-flex float-right text-capitalize form-check"
+                action="\complete_task" method="post">
+                <div id="hidden_div"
+                    class="container d-xl-inline-flex float-right text-capitalize h-25 p-2 align-middle">
+                    <input type="hidden" id="task_id" name="task_id" value="" />
+
+                    <input type="hidden" name="task_todo" id="task_todo" value="{{values}}" />
+
+                    <p class="flex-column float-md-right text-info" style="
+                text-decoration: underline;
+                margin: -10px;
+                margin-right: -150px;
+                position: relative;
+                width: 200px;
+              ">
+                        Complete Task
+                    </p>
+                    <input type="checkbox" name="check{{key}}" id="check{{key}}" value="on"
+                        placeholder="tick task to complete" class="col-sm-3 rounded check-task check"
+                        style="display: block" />
+                    <!--<input
+            type="checkbox"
+            name="checks{{id}}"
+            id="checks{{id}}"
+            placeholder="tick task to complete"
+            value="{{id}}"
+            class="col-sm-1 rounded check-task text-dark"
+            style="display: none;"
+            checked = "checked" 
+            />-->
+                    <div id="check-task-status_no" name="check-task-status_no"
+                        class="text-dark bg-success float-lg-right h-25 m-3 p-3 btn btn-success"
+                        style="z-index: 9; display: none" onclick="no(this);">
+                        No
+                    </div>
+                    <button type="submit" id="btnsave" name="btnsave"
+                        class="btn btn-primary btn-sm h-25 float-sm-right d-sm-block m-3 p-3 align-baseline btnsave">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endfor %} {% endif %}
+    </div>
+
+    <div class="container-lg d-lg-inline-flex col-8 bg-white rounded-bottom m-4 p-4 size justify-content-end">
+        <div class="justify-content-center">
+            <div hlass="col-lg-5">
+                <button id="clear-button" class="btn btn-danger m-3 p-3">
+                    Clear Completed Tasks
+                </button>
+            </div>
+        </div>
+        <div class="justify-content-center">
+            <div hlass="col-lg-5">
+                <button id="completed-button" class="btn btn-success m-3 p-3">
+                    Show All Completed Tasks History
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="task_history"
+        class="container-xl d-xl-flex justify-content-center align-items-center bg-white flex-column">
+        {% if info %}
+        <div id="messages_" class="flex-wrap justify-content-start align-items-start" style="font-size: 36px">
+            {{info}}
+        </div>
+        {% endif %}
+
+        <div id="task_history" class="container-xl d-xl-flex flex-xl-wrap align-content-center task_history_none">
+            <table class="flex-column border table">
+                <tr id="header" class="text-dark text-capitalize text-center m-3 p-3 flex-row col-xl-12"
+                    style="background-color: bisque">
+                    <th class="col-4 border-right">Task ID</th>
+                    <th class="col-12 border-right">Task Done</th>
+                    <th class="col-9 border-right">Check Status</th>
+                    <th class="col-9 border-right">Check State</th>
+                    <th class="col-12 border-right">Check Date</th>
+                </tr>
+                {% if data_stmt %} {% for task_id, todo_task, check_state,
+                check_status, check_date in data_stmt %}
+                <tr id="row" class="text-dark text-capitalize text-center m-3 p-3 flex-row col-xl-12 border">
+                    <td id="id" class="col-4 border-right">{{ task_id }}</td>
+                    <td id="task" class="col-12 border-right">{{ todo_task }}</td>
+                    <td id="state" class="col-9 border-right">{{ check_state }}</td>
+                    <td id="status" class="col-9 border-right">{{ check_status }}</td>
+                    <td id="date" class="col-12 border-right">{{ check_date }}</td>
+                </tr>
+                {% endfor %} {% endif %}
+            </table>
+        </div>
+    </div>
+    <div id="btn_container"
+        class="container-lg flex-lg-wrap col-8 bg-bg-white rounded-bottom p-4 size task_history_none">
+        <div class="d-flex justify-content-center align-items-center">
+            <div hlass="col-lg-5">
+                <button id="clear-button" class="btn btn-danger m-3 p-3">
+                    Clear Tasks History
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,254 @@
+                                    body {
+                                        max-width: 100%;
+                                        max-height: 100%;
+                                        padding: 0;
+                                        margin: 0;
+                                        overflow-x: hidden;
+                                        scroll-behavior: smooth;
+                                    }
+                                    
+                                    .color {
+                                        font-size: 4em;
+                                        text-align: center;
+                                        color: whitesmoke;
+                                    }
+                                    
+                                    .background-color {
+                                        border-top-left-radius: 10px;
+                                        border-top-right-radius: 10px;
+                                        box-shadow: -2px -2px 5px rgba(0, 0, 0, .25) inset, 0px 0px 0px white inset;
+                                        height: 100%;
+                                        width: 100%;
+                                        background-size: cover no-repeat;
+                                        background-color: rgb(21, 55, 121) !important;
+                                        border-bottom: 0px !important;
+                                    }
+                                    
+                                    @keyframes transition-color {
+                                        100% {
+                                            clip-path: polygon(100% 100%, 100% 100%, 100% 100%);
+                                            z-index: -1;
+                                            color: bisque;
+                                        }
+                                        20% {
+                                            clip-path: polygon(100% 160%, 60% 100%, 180% 60%);
+                                            z-index: -1;
+                                            color: bisque;
+                                        }
+                                        40% {
+                                            clip-path: polygon(0% 80%, 80% 100%, 80% 80%);
+                                            z-index: -1;
+                                            color: bisque;
+                                        }
+                                        100% {
+                                            clip-path: polygon(100% 100%, 0% 100%, 100% 100%);
+                                            z-index: -1;
+                                            background-color: bisque;
+                                        }
+                                    }
+                                    
+                                    .skeww {
+                                        animation: backwards;
+                                        animation-name: transition-color;
+                                        animation-duration: 10s;
+                                        cursor: pointer;
+                                        animation-play-state: running;
+                                        animation-iteration-count: infinite;
+                                        animation-timing-function: linear;
+                                    }
+                                    
+                                    .skeww:hover {
+                                        animation-name: transition-color;
+                                        animation-play-state: paused;
+                                    }
+                                    
+                                    .size {
+                                        background-size: cover no-repeat;
+                                        transform: scaleX(102.35%);
+                                    }
+                                    
+                                    .align-start {
+                                        position: relative;
+                                        margin-top: -20px;
+                                        margin-left: -400px;
+                                    }
+                                    
+                                    .hideyes {
+                                        display: none;
+                                        z-index: -1;
+                                        color: transparent;
+                                    }
+                                    
+                                    input[type="checkbox"]:checked:disabled {
+                                        /*outline: 3px solid rgb(30, 93, 88);*/
+                                        size: 3em;
+                                        accent-color: lightgrey;
+                                        content: hideyes;
+                                        /*box-shadow: inset 9px 1px 9px 1px rgb(113, 194, 174);
+                                                                                        */
+                                    }
+                                    
+                                    .form-check {
+                                        margin-top: -90px !important;
+                                    }
+                                    
+                                    .strike_through {
+                                        text-decoration: line-through red;
+                                        z-index: 1;
+                                    }
+                                    
+                                    .text-value {
+                                        color: black !important;
+                                        width: 70%;
+                                        max-width: fit-content;
+                                        font-stretch: normal;
+                                    }
+                                    
+                                    .align-end {
+                                        position: relative;
+                                        margin-top: 0px;
+                                        margin-right: 200px;
+                                        text-align: center;
+                                    }
+                                    
+                                    .border-0 {
+                                        z-index: 1;
+                                        border: none !important;
+                                        background-color: white;
+                                        box-shadow: -2px -2px 5px rgba(0, 0, 0, .25) inset, 0px 0px 0px rgb(15, 3, 3) inset;
+                                    }
+                                    
+                                    .border-left {
+                                        z-index: 1;
+                                        border: none !important;
+                                        background-color: white;
+                                        box-shadow: -2px -2px 5px rgba(0, 0, 0, .25) inset, 0px 0px 0px rgb(15, 3, 3) inset;
+                                    }
+                                    
+                                    .border-right {
+                                        z-index: 1;
+                                        border: none !important;
+                                        background-color: white;
+                                        box-shadow: -2px -2px 5px rgba(0, 0, 0, .25) inset, 0px 0px 0px rgb(15, 3, 3) inset;
+                                    }
+                                    
+                                    tr:nth-child(odd) {
+                                        background-color: white;
+                                        border-bottom-left-radius: 10px;
+                                        border-bottom-right-radius: 10px;
+                                        box-shadow: -2px -2px 5px rgba(0, 0, 0, .25) inset, 0px 0px 0px rgb(15, 3, 3) inset;
+                                    }
+                                    
+                                    tr:nth-child(odd):hover {
+                                        background-color: whitesmoke;
+                                        cursor: pointer !important;
+                                        height: calc(40 * 2px);
+                                        z-index: 99;
+                                        box-shadow: -2px -2px 5px rgba(0, 0, 0, .25) inset, 0px 0px 0px whitesmoke inset;
+                                    }
+                                    
+                                    tr:nth-child(even):hover {
+                                        background-color: whitesmoke;
+                                        cursor: pointer !important;
+                                        z-index: 99;
+                                        height: calc(40 * 2px);
+                                        box-shadow: -2px -2px 5px rgba(0, 0, 0, .25) inset, 0px 0px 0px rgb(15, 3, 3) inset;
+                                    }
+                                    
+                                    tr:nth-child(even) {
+                                        background-color: white;
+                                        border-top-left-radius: 10px;
+                                        border-top-right-radius: 10px;
+                                        box-shadow: -2px -2px 5px rgba(0, 0, 0, .25) inset, 0px 0px 0px whitesmoke inset;
+                                    }
+                                    
+                                    .header {
+                                        border: none !important;
+                                        background-color: white !important;
+                                    }
+                                    
+                                    .header:hover {
+                                        border: none !important;
+                                        background-color: white !important;
+                                    }
+                                    
+                                    .border-white {
+                                        background-color: whitesmoke;
+                                        border-bottom-left-radius: 10px;
+                                        border-bottom-right-radius: 10px;
+                                        box-shadow: -2px -2px 15px rgba(0, 0, 0, .25) inset, 0px 0px 30px white inset;
+                                    }
+                                    
+                                    input[type="checkbox"]:checked {
+                                        size: 3em;
+                                        accent-color: lightgrey;
+                                        /*content: '\2713';*/
+                                        content: icon;
+                                    }
+                                    
+                                    .text {
+                                        text-decoration: none;
+                                        z-index: 0;
+                                    }
+                                    
+                                    .touched {
+                                        color: black;
+                                        background-color: bisque;
+                                    }
+                                    
+                                    .checked {
+                                        size: 3em;
+                                        accent-color: lightgrey;
+                                        /*content: '\2713';*/
+                                        content: icon;
+                                    }
+                                    
+                                    .btnsave {
+                                        cursor: pointer;
+                                        z-index: 9;
+                                    }
+                                    
+                                    .task_history_none {
+                                        display: none;
+                                    }
+                                    
+                                    .task_history_block {
+                                        display: block;
+                                    }
+                                    
+                                    .table {
+                                        display: none;
+                                    }
+                                    
+                                    .task-list:nth-child(1+n) {
+                                        background-color: '#FF'0003 + 5'px';
+                                    }
+                                    
+                                    .bottom {
+                                        background-color: skyblue;
+                                        border-bottom-left-radius: 10px;
+                                        border-bottom-right-radius: 10px;
+                                        box-shadow: -2px -2px 5px rgba(0, 0, 0, .25) inset, 0px 0px 0px white inset;
+                                    }
+                                    
+                                    .none {
+                                        display: block !important;
+                                    }
+                                    
+                                    .container {
+                                        display: table-row;
+                                        grid-template-rows: repeat(5, 1fr);
+                                        gap: 10px;
+                                    }
+                                    
+                                    .box {
+                                        border: 3px solid #666;
+                                        background-color: #ddd;
+                                        border-radius: .5em;
+                                        padding: 10px;
+                                        cursor: move;
+                                    }
+                                    
+                                    .box.over {
+                                        border: 3px dotted #666;
+                                    }

@@ -1,0 +1,542 @@
+<html lang="en">
+  <head>
+    <title>To do List</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='style.css')}}"
+    />
+  </head>
+
+  <body>
+    <div class="container-xl h-25 background-color">
+      <div class="container-xl skeww">
+        <h1 class="d-xl-flex col-12 p-xl-5 color">A To do List App</h1>
+      </div>
+    </div>
+    <div
+      id="container"
+      name="container"
+      class="container-xl flex-xl-wrap bg-primary border-primary p-5 wrapper-xl bottom"
+    >
+      <h3 class="text-dark p-2 text-lg-left">To do Task</h3>
+      <form
+        enctype="multipart/form-data"
+        id="add-task"
+        name="add-task"
+        action="\add_task"
+        class="form-group p-3"
+        method="post"
+      >
+        <input
+          type="text"
+          id="task-input"
+          name="task-input"
+          placeholder="Add a new task"
+          class="small p-4 col-6 float-left border-dark rounded-left text-black-100 text-capitalize"
+        />
+        <div id="add_btn_task">
+          <button
+            type="submit"
+            class="small btn btn-info pb-4 m-0 p-3 col-lg-4 rounded-right border-dark m-1"
+          >
+            Add Task
+          </button>
+        </div>
+      </form>
+      <div class="flex text-info text-center col-lg-6">
+        {% if task == "success" %}
+        <h3 class="alert-success">{{ message }}</h3>
+        {% elif task == "warning" %}
+        <h3 class="alert-warning">{{ message }}</h3>
+        {% endif %}
+      </div>
+      <div id="list-container" class="text-center col-xl-12 m-0 p-0 container">
+      {% if not used_dict %}
+      <ul id="task-list-1" class="bg-light rounded col-9 m-3 p-3">
+        <li>No tasks added yet.</li>
+      </ul>
+      {% endif %} {% if used_dict %} {% for key, value in used_dict.items() %}
+      <div id="task-list" class="bg-light rounded col-xl-12 m-3 p-5 task-div none box" style="width:1000px;" draggable="true">
+        <div
+          id="text-value"
+          name="text-value"
+          class="m-1 p-3 text-capitalize flex-wrap text-value"
+        >
+          <p id="text-dark" class="text-capitalize text-black-100">
+            &#x2022;&nbsp;{{ value | string | trim('[') | trim(']') |
+            replace("'",' ') | replace('"','') | replace('\n','') }}
+          </p>
+        </div>
+        <form
+          enctype="multipart/form-data"
+          id="complete_task"
+          name="complete_task"
+          class="forrm-horizontal form-group d-xl-inline-flex float-right text-capitalize form-check"
+          action="\complete_task"
+          method="post"
+        >
+          <div
+            id="hidden_div"
+            class="container d-xl-inline-flex float-right text-capitalize h-25 p-2 align-middle"
+          >
+            <input type="hidden" id="task_id" name="task_id" value="{{key}}" />
+
+            <input
+              type="hidden"
+              name="task_todo"
+              id="task_todo"
+              value="{{value}}"
+            />
+
+            <p
+              class="flex-column float-md-right text-info"
+              style="
+                text-decoration: underline;
+                margin: -10px;
+                margin-right: -150px;
+                position: relative;
+                width: 200px;
+              "
+            >
+              Complete Task
+            </p>
+            <input
+              type="checkbox"
+              name="check{{key}}"
+              id="check{{key}}"
+              value="on"
+              placeholder="tick task to complete"
+              class="col-sm-3 rounded check-task check"
+              style="display: block;"
+            />
+            <!--<input
+            type="checkbox"
+            name="checks{{id}}"
+            id="checks{{id}}"
+            placeholder="tick task to complete"
+            value="{{id}}"
+            class="col-sm-1 rounded check-task text-dark"
+            style="display: none;"
+            checked = "checked" 
+            />-->
+            <div
+              id="check-task-status_no"
+              name="check-task-status_no"
+              class="text-dark bg-success float-lg-right h-25 m-3 p-3 btn btn-success"
+              style="z-index: 9; display: none"
+              onclick="no(this);"
+            >
+              No
+            </div>
+            <button
+              type="submit"
+              id="btnsave"
+              name="btnsave"
+              class="btn btn-primary btn-sm h-25 float-sm-right d-sm-block m-3 p-3 align-baseline btnsave"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+      {% endfor %} {% endif %}
+      </div>
+    </div>
+    <div class="">
+      <form
+          enctype="multipart/form-data"
+          id="delete_task"
+          name="delete_task"
+          class="forrm-horizontal form-group d-xl-inline-flex float-right text-capitalize form-check"
+          action="\delete_task_history"
+          method="get"
+        >
+          <div
+            id="hidden_div"
+            class="container d-xl-inline-flex float-right text-capitalize h-25 p-2 align-middle"
+          >
+            <input type="hidden" id="task_id" name="task_id" value="" />
+
+            <input
+              type="hidden"
+              name="task_todo"
+              id="task_todo"
+              value=""
+            />
+
+        </form>
+    </div>
+    <div
+      class="container-lg d-lg-inline-flex col-8 bg-white rounded-bottom m-4 p-4 size justify-content-end"
+    >
+    
+      <div class="justify-content-center">
+        <div hlass="col-lg-5">
+          <button id="clear-button" class="btn btn-danger m-3 p-3">
+            Clear Completed Tasks
+          </button>
+        </div>
+      </div>
+      <div class="justify-content-center">
+        <div hlass="col-lg-5">
+          <button id="completed-button" class="btn btn-success m-3 p-3">
+            Show All Tasks History
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="task_history"
+      class="container-xl d-xl-flex justify-content-center align-items-center bg-white flex-column"
+    >
+      {% if info %}
+      <div
+        id="messages_"
+        class="flex-wrap justify-content-start align-items-start"
+        style="font-size: 36px"
+      >
+        {{info}}
+      </div>
+      {% endif %}
+
+      <div
+        id="task_history_1"
+        class="container-xl d-xl-flex flex-xl-wrap align-content-center"
+       
+      >
+        <table id="divtable" class="flex-column">
+          <tr
+            id="header"
+            class="text-dark text-capitalize text-center m-3 p-3 flex-row col-xl-12 header"
+            
+          >
+            <th class="col-4 border-left">Task ID</th>
+            <th class="col-12 border-0">Task Done</th>
+            <th class="col-9 border-0">Check Status</th>
+            <th class="col-9 border-0">Check State</th>
+            <th class="col-12 border-right">Check Date</th>
+          </tr>
+          {% if data_stmt %} {% for task_id, todo_task, check_state,
+          check_status, check_date in data_stmt %}
+          <tr
+            id="row"
+            class="text-dark text-capitalize text-center m-3 p-3 flex-row col-xl-12"
+            
+          >
+            <td id="id" class="col-4">{{ task_id }}</td>
+            <td id="task" class="col-12">{{ todo_task }}</td>
+            <td id="state" class="col-9">{{ check_state }}</td>
+            <td id="status" class="col-9">{{ check_status }}</td>
+            <td id="date" class="col-12">{{ check_date }}</td>
+          </tr>
+          {% endfor %} {% endif %}
+        </table>
+      </div>
+    </div>
+    <div
+      id="btn_container"
+      class="container-lg flex-lg-wrap col-8 bg-bg-white rounded-bottom p-4 size"
+    >
+      <div class="d-flex justify-content-center align-items-center">
+        <div hlass="col-lg-5">
+          <button id="clear-button" class="btn btn-danger m-3 p-3">
+            Clear Tasks History
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(window).on("load", function () {
+      // Your jQuery code here
+      if (jQuery) {
+        // jQuery is loaded
+        alert("Yeah! another way to load jQuery");
+      } else {
+        // jQuery is not loaded
+        alert("Doesn't Work");
+      }
+    });
+  });
+</script>
+<script>
+   
+
+  function task_list(){
+
+    if ($("#task-list").length == 19){
+    alert(
+      "Maximum number of rows displayable reached, delete rows to show the remaining tasks"
+    );
+    }
+    else {
+      alert('User can still add rows' + 'row' $(this).length + 'of 20');
+    }
+  }
+</script>
+<script>
+  $("*[id*=task-list]:visible").sortable({
+      revert:true
+  });
+
+  //$("*[id*=task-list]:visible").draggable({
+  //  connectToSortable: "*[id*=task-list]:visible",
+  //  revert: true,
+  //  cursor: "move",
+  //  opacity: 0.3,
+  //  distance: 30,
+  //  snap:true,
+  //  snapMode:"outside",
+  //  axis:'y',
+  //  containment: "#list-container",
+  //  start: function(event, ui) {
+  //    ui = $(this);
+  //   ui.style.height = ui.style.height * 2.5 + "px";
+  //    $('#list-container, #container').css('height', ui.style.height);
+  //    callback();
+  //  },
+  //  stop: function(event, ui) {
+  //    ui = $(this);
+  //    ui.style.height = ui.style.height * 2.5 + "px";
+  //     $('#list-container, #container').css('height', ui.style.height);
+  //    callback();
+   // },
+  //});
+
+  //function callback() {
+   
+   //     $('*[id*=task-list]:visible').next().addClass( "none" );
+      
+  //}
+
+
+//$("*[id*=task-list]:visible").enableSelection();
+
+
+  if ($("#task_history, #header").show() == true) {
+    $("#row:nth-child(odd)").css({ "background-color": "lightskyblue" });
+    $("#row:nth-child(even)").css({ "background-color": "whitesmoke" });
+  }
+
+  function hide_task() {
+    $(".check, .task-div").each(function () {
+      if ($(this).on("checked") && $(this).hasClass("strike_through")) {
+        $(this).parent().parent().parent().parent().remove();
+        //$(this).remove();
+      }
+    });
+  }
+
+  function delete_task() {
+
+// Open a new window
+      window.open("http://127.0.0.1:5000/delete_task_history", "parent");
+
+  $.ajax({
+    url: "http://127.0.0.1:5000/delete_task_history",
+    method: "GET",
+    dataType: text,
+    success: function (response) {
+      //$(this).parent().parent().parent().remove();
+      $(".check, .box").each(function () {
+      if ($(this).on("checked") && $(this).hasClass("strike_through")) {
+        $(this).parent().parent().parent().parent().remove();
+        //$(this).remove();
+      }
+    });
+      alert("Tasks have been cleared");
+    },
+    error: function (xhr, status, error) {
+      alert("Error deleting tasks: " + error);
+    },
+});
+}
+
+  $("#clear-button.p-3").bind({
+    click: function () {
+      delete_task(); 
+    },
+  });
+</script>
+<script>
+  if  (window.location.href.indexOf('complete_task') > -1)
+  {
+    $("#task_history_1").hide();
+    $('#btn_container').hide();
+    $('#divtable').hide();
+  }
+  if (window.location.href.includes('add_task') || window.location.href.includes('http://127.0.0.1:5000'))
+  {
+    $("#task_history_1").hide();
+    $('#btn_container').hide();
+    $('#divtable').hide();
+  }
+  $("#completed-button").one('click', function(){
+    if ($(this).one('click'))
+      {
+
+      
+      // Your jQuery code here
+      alert('Show completed tasks');
+      $("#task_history_1").show();
+      $('#btn_container').show();
+      $('#divtable').show();
+
+      // Open a new window
+      window.open("http://127.0.0.1:5000/show_task_history", "parent");
+
+      $.ajax({
+        url: "http://127.0.0.1:5000/show_task_history",
+        type: "GET",
+        dataType: "text", // Corrected
+        success: function (data) {
+          // Update elements with data from the server
+          $("#id").text(data);
+          $("#task").text(data);
+          $("#state").text(data);
+          $("#status").text(data);
+          $("#date").text(data);
+        },
+        error: function (xhr, status, error) {
+          console.log(xhr);
+          console.log(status);
+          console.log(error);
+       },
+    }); 
+  }
+  });
+  if  (window.location.href.indexOf('show_task_history') > -1)
+  {
+    $("#task_history_1").show();
+    $('#btn_container').show();
+    $('#divtable').show();
+  }
+
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+
+  var dragSrcEl = null;
+  let isChecked;
+  
+  function handleDragStart(e) {
+    this.style.opacity = '0.4';
+    dragSrcEl = this;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+}
+
+  function handleDragOver(e) {
+    e.preventDefault(); // No need to check if e.preventDefault exists
+    e.dataTransfer.dropEffect = 'move'; 
+    return false;
+  }
+
+  function handleDragEnter(e) {
+    this.classList.add('over');
+    
+  }
+
+  function handleDragLeave(e) {
+    this.classList.remove('over');
+  }
+
+  function handleDrop(e) {
+    if (e.stopPropagation) {
+      e.stopPropagation(); // Stops the browser from redirecting.
+    }
+
+    // Prevent drop onto the same item
+    if (dragSrcEl !== this) {
+      dragSrcEl.innerHTML = this.innerHTML;
+      this.innerHTML = e.dataTransfer.getData('text/html');
+      const container = document.querySelector('.box');
+      const checkboxes = container.querySelectorAll('.check');
+
+      // Capture the current state of checkboxes
+      const checkboxState = Array.from(checkboxes).map(cb => cb.checked);
+
+// Ensure `dragSrcEl` is defined and is the element to be moved
+// For example: let dragSrcEl = this; // this should be set based on your drag event context
+
+    //const parent = this.parentNode; // Ensure `this` is the correct element
+    //parent.insertBefore(dragSrcEl, this.nextSibling); // Reorder elements
+      //dragSrcEl = this;
+// Restore the checkbox states after reordering
+    checkboxState.forEach((state, index) => {
+    // Check if the checkbox exists before trying to set its checked state
+    if (checkboxes[index]) {
+        checkboxes[index].checked = state;
+    }
+    });
+
+      
+    }
+    return false;
+  }
+
+  function handleDragEnd(e) {
+    this.style.opacity = '1';
+    
+    // Use querySelectorAll to ensure you're working with all the items
+    document.querySelectorAll('.container .box').forEach(function(item) {
+      item.classList.remove('over');
+  });
+
+}
+  // Query all checkboxes and add the change event listener
+  
+
+  // Add event listeners to draggable items
+  let items = document.querySelectorAll('.container .box');
+  items.forEach(function(item) {
+    item.addEventListener('dragstart', handleDragStart, false);
+    item.addEventListener('dragenter', handleDragEnter, false);
+    item.addEventListener('dragover', handleDragOver, false);
+    item.addEventListener('dragleave', handleDragLeave, false);
+    item.addEventListener('dragend', handleDragEnd, false);
+    item.addEventListener('drop', handleDrop, false);
+  });
+
+});
+
+</script>
+<script type="text/javascript">
+  // Refresh the page every 5 seconds
+ 
+ window.addEventListener('load', function()
+ {
+ 
+  // Get the current URL of the page
+  if (window.location.href.indexOf('add_task') > -1)
+  {
+    alert('hi');
+    setInterval(refresh, 5000);
+  }
+});
+function refresh()
+  {
+      alert('hii');
+      // Get the current URL of the page
+    var uro = windows.location.href;
+
+      // Get the position of the last '/' in the URL
+      var uiro = uro.indexOf('1');
+      var uiroo = uro.indexOf('a') - 1;
+
+      // If the URL contains '/add_task'
+      const uri = urio.substr(uiro, uiroo);
+
+      window.open(uri, target="_self");
+ }
+</script>

@@ -1,0 +1,2 @@
+-- SQLite
+CREATE TABLE `todos` (`task_id` INTEGER PRIMARY KEY UNIQUE NOT NULL, `todo_task` TEXT UNIQUE NOT NULL, `check_status` TEXT NOT NULL, `check_state` TEXT NOT NULL, `check_date` TEXT NOT NULL)
